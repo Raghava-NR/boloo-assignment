@@ -1,0 +1,8 @@
+Django==2.2
+djangorestframework==3.9.4
+requests==2.24.0
+celery==4.4.6
+redis==3.5.3
+mysqlclient==2.0.1
+djangorestframework_camel_case==1.1.2
+PyJWT==1.7.1

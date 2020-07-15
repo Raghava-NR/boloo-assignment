@@ -1,0 +1,7 @@
+*.pyc
+.idea/
+boloo/.idea/
+shipments/.idea/
+shipments/.idea/
+boloo/boloo/config.ini
+boloo/shipments/migrations/*.py
