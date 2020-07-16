@@ -6,6 +6,7 @@
 1. CRUD API for Shop
 2. Rest-ful APIs for shipments and shipment-details.
 3. Authentication using access-token generated from client-id and client-secret
+4. Initial-sync of multiple shops
 
 **Tasks TBD:**
 
