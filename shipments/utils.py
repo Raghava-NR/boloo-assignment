@@ -5,7 +5,7 @@ from djangorestframework_camel_case.util import underscoreize
 import string
 import random
 
-from boloo.global_constants import BOLOO_CLIENT_ID, BOLOO_CLIENT_SECRET_KEY, ACCESS_TOKEN_URL
+from boloo.global_constants import ACCESS_TOKEN_URL
 
 
 class APICall:
@@ -31,15 +31,18 @@ class APICall:
         return headers
 
     @staticmethod
-    def get_access_token():
+    def get_access_token(client_id, client_secret):
 
         """
         Fetches access_token from client_id and client_secret
+
+        :param client_id:
+        :param client_secret:
         :return: access_token <str>
         """
 
-        r = requests.post(ACCESS_TOKEN_URL, data={"client_id": BOLOO_CLIENT_ID,
-                                                  "client_secret": BOLOO_CLIENT_SECRET_KEY,
+        r = requests.post(ACCESS_TOKEN_URL, data={"client_id": client_id,
+                                                  "client_secret": client_secret,
                                                   "grant_type": "client_credentials"})
 
         response_data = r.json()
@@ -47,13 +50,16 @@ class APICall:
         return response_data["access_token"]
 
     @staticmethod
-    def get_request(access_token, url):
+    def get_request(access_token, url, client_id, client_secret, wait_for_retry=False):
 
         """
         To make an API call
-        Handles if the token is expired and if rate-limit is reached.
+        Handles if the token is expired.
         :param access_token:
         :param url:
+        :param client_id:
+        :param client_secret:
+        :param wait_for_retry:
         :return:
         """
 
@@ -64,23 +70,25 @@ class APICall:
             # Camel to snake case converter
             response_data = underscoreize(r.json())
 
-            return access_token, response_data
+            return access_token, response_data, 0
 
         elif r.status_code == 401:
             # Token is expired
             # Get a new access_token and try again
-            new_access_token = APICall.get_access_token()
+            new_access_token = APICall.get_access_token(client_id, client_secret)
 
-            return APICall.get_request(new_access_token, url)
+            return APICall.get_request(new_access_token, url, client_id, client_secret)
 
         elif r.status_code == 429:
-            # rate-limit reached
-            retry_after = r.headers['retry-after']
 
-            # wait for `retry_after` seconds and try again
-            time.sleep(int(retry_after))
+            if wait_for_retry:
 
-            return APICall.get_request(access_token, url)
+                # sleep if wait_for_retry is explicitly specified
+                time.sleep(int(r.headers['retry-after']))
+
+                return APICall.get_request(access_token, url, client_id, client_secret)
+
+            return access_token, None, int(r.headers['retry-after'])
 
         else:
             # unknown status_code, raise exception
@@ -127,3 +135,9 @@ class CommonUtils:
         random_choices = string.ascii_letters + string.digits + '_-'
 
         return ''.join((random.choice(random_choices) for _ in range(length)))
+
+    @staticmethod
+    def chunks(l, n):
+        """Yield successive n-sized chunks from l."""
+        for i in range(0, len(l), n):
+            yield l[i:i + n]

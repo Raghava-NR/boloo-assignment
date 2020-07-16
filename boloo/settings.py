@@ -23,8 +23,8 @@ config.read(CONFIG_FILE)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&ph1pj(z8!c@rp$5zw8@2@!w5vc7vnt*ff1j0kssm#%p_5l58^'
+# SECRET KEY!!
+SECRET_KEY = config.get('main', 'secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

@@ -51,7 +51,7 @@ class ShipmentViewSet(viewsets.ReadOnlyModelViewSet):
 
             query = self.prefetch_shipment_items(queryset)
 
-            return query
+            return query.order_by('-shipment_date')
 
         elif self.action == 'retrieve':
 
@@ -65,7 +65,7 @@ class ShipmentViewSet(viewsets.ReadOnlyModelViewSet):
 
             return query
 
-        return queryset.order_by('-shipment_date')
+        return
 
 
 class ShopViewSet(viewsets.ModelViewSet):
@@ -79,20 +79,6 @@ class ShopViewSet(viewsets.ModelViewSet):
 
     queryset = Shop.objects.filter(is_active=True)
     serializer_class = ShopSerializer
-
-    def perform_create(self, serializer):
-
-        """
-        Overrides super().perform_create() to accommodate   client_id & client_secret generation
-        :param serializer:
-        :return:
-        """
-
-        client_id = Shop.generate_new_client_id()
-
-        client_secret = Shop.generate_new_client_secret()
-
-        serializer.save(client_id=client_id, client_secret=client_secret)
 
     def perform_destroy(self, instance):
 

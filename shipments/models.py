@@ -74,13 +74,16 @@ class Address(models.Model):
     Model class representing address information (both customer and billing)
     """
 
+    # choices for fulfilment_method
+    TYPE_CHOICES = ((1, "Customer"), (2, "Billing"))
+
     pick_up_point_name = models.CharField(max_length=64, default='')
-    salutation_code = models.CharField(max_length=8, default='')
+    salutation_code = models.CharField(max_length=32, default='')
     first_name = models.CharField(max_length=32)
     surname = models.CharField(max_length=32, default='')
     street_name = models.CharField(max_length=32, default='')
-    house_number = models.CharField(max_length=8, default='')
-    house_number_extended = models.CharField(max_length=8, default='')
+    house_number = models.CharField(max_length=32, default='')
+    house_number_extended = models.CharField(max_length=32, default='')
     address_supplement = models.CharField(max_length=32, default='')
     extra_address_information = models.CharField(max_length=64, default='')
     zip_code = models.CharField(max_length=16, default='')
@@ -92,6 +95,11 @@ class Address(models.Model):
     chamber_of_commerce_number = models.CharField(max_length=32, default='')
     order_reference = models.CharField(max_length=32, default='')
     delivery_phone_number = models.CharField(max_length=32, default='')
+
+    type = models.CharField(choices=TYPE_CHOICES, max_length=8)
+
+    class Meta:
+        unique_together = ('email', 'type')
 
 
 class Transporter(models.Model):
