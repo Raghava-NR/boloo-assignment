@@ -219,7 +219,7 @@ def fetch_shipments(shop_ids):
     # dict representing shop_id: shipments_ids <list>
     shop_to_shipments_ids_map = defaultdict(list)
 
-    fulfilment_methods = ("FBR", )
+    fulfilment_methods = ("FBR", "FBB")
 
     # current shop_id
     shop_id = next(shops_cycle)
@@ -276,7 +276,7 @@ def fetch_shipments(shop_ids):
 
             shipment_ids = [shipment['shipment_id'] for shipment in response_data['shipments']]
 
-            shop_to_shipments_ids_map[shop_id].extend(shipment_ids[:5])
+            shop_to_shipments_ids_map[shop_id].extend(shipment_ids)
 
             # increment page of current_shop
             shop_id_to_current_page_no_map[shop_id] += 1
