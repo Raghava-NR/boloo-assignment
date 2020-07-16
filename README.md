@@ -1,4 +1,10 @@
-**PYTHON 3.6**
+**Tech Stack Used:**
+Python 3.6
+Django (+DRF)
+MySQL
+Celery
+Redis
+
 
 
 **Tasks Completed:**
@@ -58,3 +64,7 @@ To run redis and celery:
 redis: _redis-server_
 celery: navigate to project file, activate venv and run _celery worker -A boloo --loglevel=INFO --concurrency=4 -n worker1_
 set concurrency to no.of cpu cores
+
+
+**NOTE:**
+Initial sync is tested only for FBR Fulfilment and first 10 shipments of each page of boloo shop.
