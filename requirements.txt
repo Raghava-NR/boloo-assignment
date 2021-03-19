@@ -1,5 +1,5 @@
 Django==2.2
-djangorestframework==3.9.4
+djangorestframework==3.11.2
 requests==2.24.0
 celery==4.4.6
 redis==3.5.3
