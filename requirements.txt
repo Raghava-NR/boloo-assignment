@@ -5,4 +5,4 @@ celery==4.4.6
 redis==3.5.3
 mysqlclient==2.0.1
 djangorestframework_camel_case==1.1.2
-PyJWT==1.7.1
+PyJWT==2.4.0
